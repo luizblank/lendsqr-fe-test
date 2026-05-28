@@ -1,8 +1,8 @@
-.wrapper {
+.container {
     position: relative;
 }
 
-input {
+.form_input {
     width: 100%;
     height: auto;
 
@@ -14,12 +14,13 @@ input {
     border-radius: 0.5rem;
 }
 
-input::placeholder {
+.form_input::placeholder {
     color: rgba(84, 95, 125, 1);
 }
 
-input:focus, input:active {
-    outline-color: rgba(33, 63, 125, 0.5);
+.form_input:focus, .form_input:active {
+    outline-color: transparent;
+    border-color: rgba(84, 95, 125, 0.35);
 }
 
 .show_button {
@@ -40,5 +41,5 @@ input:focus, input:active {
 
 .show_button:hover {
     cursor: pointer;
-    filter: brightness(0.8);
+    filter: brightness(0.9);
 }

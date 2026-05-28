@@ -11,8 +11,8 @@ export default function Field({ placeholder, type }: FieldProps) {
 
     return (
         <>
-            <div className={styles.wrapper}>
-                <input placeholder={placeholder} type={!showPassword ? type : 'text'} id={type}/>
+            <div className={styles.container}>
+                <input className={styles.form_input} placeholder={placeholder} type={!showPassword ? type : 'text'} id={type}/>
                 { type == 'password' &&
                     <button onClick={() => setShowPassword(!showPassword)} type='button' className={styles.show_button}>{!showPassword ? "SHOW" : "HIDE"}</button>
                 }
