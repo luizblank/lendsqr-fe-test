@@ -1,0 +1,328 @@
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.selected_screen {
+    width: 100%;
+    height: calc(100vh - 96px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 40px;
+
+    padding: 60px;
+
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(57, 205, 204, 0.5) transparent;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(57, 205, 204, 0.5);
+        border-radius: 6px;
+
+        &:hover {
+            background: rgba(57, 205, 204, 0.8);
+        }
+    }
+
+    .return_button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+
+        color: rgba(84, 95, 125, 1);
+        font-size: 1rem;
+        font-weight: 400;
+
+        background-color: transparent;
+
+        border: 0;
+    }
+
+    .return_button {
+        cursor: pointer;
+        filter: brightness(0.9);
+    }
+
+    .title {
+        color: rgba(33, 63, 125, 1);
+        font-size: 1.5rem;
+        font-weight: 500;
+
+        margin: 0;
+    }
+}
+
+.top_bar {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+
+    button {
+        font-size: 0.875rem;
+        font-weight: 600;
+
+        background-color: transparent;
+
+        padding: 12px 16px;
+        border-radius: 8px;
+    }
+
+    button:hover {
+        cursor: pointer;
+    }
+
+    .blacklist {
+        color: rgba(228, 3, 59, 1);
+        border: 1px solid rgba(228, 3, 59, 1);
+    }
+
+    .blacklist:hover {
+        background-color: rgba(228, 3, 59, 0.1);
+    }
+
+    .pending {
+        color: rgba(233, 178, 0, 1);
+        border: 1px solid rgba(233, 178, 0, 1);
+    }
+
+    .pending:hover {
+        background-color: rgba(233, 178, 0, 0.1);
+    }
+
+    .activate {
+        color: rgba(57, 205, 204, 1);
+        border: 1px solid rgba(57, 205, 204, 1);
+    }
+
+    .activate:hover {
+        background-color: rgba(57, 205, 204, 0.1);
+    }
+
+    .deactivate {
+        color: rgba(84, 95, 125, 1);
+        border: 1px solid rgba(84, 95, 125, 1);
+    }
+
+    .deactivate:hover {
+        background-color: rgba(84, 95, 125, 0.1);
+    }
+}
+
+.info_header_container {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 4px;
+    border: 1px solid rgba(84, 95, 125, 0.15);
+
+    background-color: white;
+    box-shadow: rgba(100, 100, 111, 0.1) 0px 5px 30px 0px;
+}
+
+.info_header {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+
+    padding: 30px;
+
+    .main_info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    hr {
+        width: auto;
+        height: 80px;
+
+        margin: 0 30px;
+        border: 0.5px solid rgba(84, 95, 125, 0.2);
+    }
+}
+
+.tab_navigator {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    button {
+        color: rgba(84, 95, 125, 1);
+        font-size: 1rem;
+        font-weight: 400;
+
+        background: transparent;
+        padding: 10px;
+        border: 2px solid transparent;
+    }
+
+    button.active {
+        color: rgba(57, 205, 204, 1);
+
+        border-bottom: 2px solid rgba(57, 205, 204, 1);
+    }
+}
+
+.main_info {
+    .profile_picture {
+        width: 100px;
+        height: 100px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        color: rgba(33, 63, 125, 1);
+        background-color: rgba(33, 63, 125, 0.2);
+
+        border-radius: 100%;
+
+        .icon {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    .user {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        gap: 8px;
+
+        .fullname {
+            color: rgba(33, 63, 125, 1);
+            font-size: 1.375rem;
+            font-weight: 500;
+        }
+    
+        .username {
+            color: rgba(84, 95, 125, 1);
+            font-size: 0.875rem;
+            font-weight: 400;
+        }
+    }
+}
+
+.tier_info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+
+    .title {
+        color: rgba(84, 95, 125, 1);
+        font-size: 0.875rem;
+        font-weight: 400;
+    }
+
+    .rating {
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+    }
+
+    .icon {
+        color: rgba(233, 178, 0, 1);
+    }
+}
+
+.bank_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 8px;
+
+    .account_balance {
+        color: rgba(33, 63, 125, 1);
+        font-size: 1.375rem;
+        font-weight: 500;
+    }
+
+    .account {
+        color: rgba(84, 95, 125, 1);
+        font-size: 0.75rem;
+        font-weight: 400;
+    }
+}
+
+.general_info {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+
+    padding: 30px;
+    border-radius: 4px;
+    border: 1px solid rgba(84, 95, 125, 0.15);
+
+    background-color: white;
+    box-shadow: rgba(100, 100, 111, 0.1) 0px 5px 30px 0px;
+
+    .title {
+        color: rgba(33, 63, 125, 1);
+        font-size: 1rem;
+        font-weight: 500;
+
+        margin-bottom: 30px;
+    }
+
+    .info_sections {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .info_section {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        row-gap: 30px;
+        column-gap: 100px;
+    }
+
+    hr {
+        width: 100%;
+        height: auto;
+
+        margin: 30px 0;
+        border: 0.5px solid rgba(84, 95, 125, 0.2);
+    }
+}

@@ -1,5 +1,6 @@
 import styles from './style.module.scss';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import DashboardCard from "../../components/DashboardCard";
 import Navbar from "../../components/Navbar";
@@ -24,7 +25,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
 
-import userData from '../../data/example.json';
+import usersData from '../../data/example.json';
+import type { UserProfile } from '../../data/interfaces';
 
 interface Column {
     id: 'organization' | 'username' | 'email' | 'phoneNumber' | 'dateJoined' | 'status';
@@ -58,16 +60,9 @@ interface FilterState {
     status: string;
 }
 
-interface User {
-    organization: string;
-    username: string;
-    email: string;
-    phoneNumber: string;
-    dateJoined: string;
-    status: string;
-}
-
 export default function Dashboard() {
+    const navigate = useNavigate();
+
     const getInitialFilters = (): FilterState => {
         const saved = localStorage.getItem('userFilters');
         if (saved) return JSON.parse(saved);
@@ -75,10 +70,9 @@ export default function Dashboard() {
     };
 
     const getInitialTableData = () => {
-    const savedData = localStorage.getItem('userTableData');
-    if (savedData) return JSON.parse(savedData);
-        return userData;
-    };
+        const savedData = localStorage.getItem('userTableData');
+        return savedData ? JSON.parse(savedData) : usersData
+    }
 
     const [tableData, setTableData] = React.useState(getInitialTableData);
 
@@ -95,12 +89,12 @@ export default function Dashboard() {
     const [filters, setFilters] = React.useState<FilterState>(getInitialFilters);
     const [tempFilters, setTempFilters] = React.useState<FilterState>(filters);
 
-    const handleChangePage = (event: unknown, newPage: number) => setPage(newPage);
+    const handleChangePage = (_: unknown, newPage: number) => setPage(newPage);
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => setPage(value - 1);
+    const handlePaginationChange = (_: React.ChangeEvent<unknown>, value: number) => setPage(value - 1);
 
     const handleActionClick = (event: React.MouseEvent<HTMLButtonElement>, userEmail: string) => {
         setActionAnchorEl(event.currentTarget);
@@ -112,9 +106,17 @@ export default function Dashboard() {
         setActiveUserEmail(null);
     };
 
+    const handleViewDetails = () => {
+        navigate('/userdetails', { 
+            state: { 
+                user: activeUser
+            } 
+        });
+    }
+
     const handleStatusChange = (newStatus: string) => {
         if (activeUserEmail) {
-            const updatedData = tableData.map((user : User) => 
+            const updatedData = tableData.map((user : UserProfile) => 
                 user.email === activeUserEmail ? { ...user, status: newStatus } : user
             );
             
@@ -152,7 +154,7 @@ export default function Dashboard() {
     };
 
     const filteredData = React.useMemo(() => {
-        return tableData.filter((user : User) => {
+        return tableData.filter((user : UserProfile) => {
             const matchOrg = filters.organization === '' || user.organization.toLowerCase() === filters.organization.toLowerCase();
             const matchUser = filters.username === '' || user.username.toLowerCase().includes(filters.username.toLowerCase());
             const matchEmail = filters.email === '' || user.email.toLowerCase().includes(filters.email.toLowerCase());
@@ -164,8 +166,13 @@ export default function Dashboard() {
         });
     }, [tableData, filters]);
 
-    const activeUser = tableData.find((user : User) => user.email === activeUserEmail);
+    const organizations = Array.from(new Set(tableData.map((user: UserProfile) => user.organization)));
+    const activeUser = tableData.find((user : UserProfile) => user.email === activeUserEmail);
     const currentStatus = activeUser?.status;
+
+    const activeUsers = tableData.filter((user: UserProfile) => user.status === 'Active')
+    const usersWithLoan = tableData.filter((user: UserProfile) => user.educationAndEmployment.loanRepayment > 0)
+    const usersWithSavings = tableData.filter((user: UserProfile) => Number(user.accountBalance.replace(/[^\d.-]/g, '')) > 0)
 
     return (
         <>
@@ -177,10 +184,10 @@ export default function Dashboard() {
                     <h1 className={styles.title}>Users</h1>
 
                     <div className={styles.cards}>
-                        <DashboardCard icon={faUserGroup} label='USERS' color='rgba(223, 24, 255, 1)' bgColor='rgba(223, 24, 255, 0.1)' numbers={1200} />
-                        <DashboardCard icon={faUsers} label='ACTIVE USERS' color='rgba(87, 24, 255, 1)' bgColor='rgba(87, 24, 255, 0.1)' numbers={1200} />
-                        <DashboardCard icon={faHandHoldingDollar} label='USERS WITH LOANS' color='rgba(245, 95, 68, 1)' bgColor='rgba(245, 95, 68, 0.1)' numbers={1200} />
-                        <DashboardCard icon={faCoins} label='USERS WITH SAVINGS' color='rgba(255, 51, 102, 1)' bgColor='rgba(255, 51, 102, 0.1)' numbers={1200} />
+                        <DashboardCard icon={faUserGroup} label='USERS' color='rgba(223, 24, 255, 1)' bgColor='rgba(223, 24, 255, 0.1)' numbers={tableData.length} />
+                        <DashboardCard icon={faUsers} label='ACTIVE USERS' color='rgba(87, 24, 255, 1)' bgColor='rgba(87, 24, 255, 0.1)' numbers={activeUsers.length}/>
+                        <DashboardCard icon={faHandHoldingDollar} label='USERS WITH LOANS' color='rgba(245, 95, 68, 1)' bgColor='rgba(245, 95, 68, 0.1)' numbers={usersWithLoan.length} />
+                        <DashboardCard icon={faCoins} label='USERS WITH SAVINGS' color='rgba(255, 51, 102, 1)' bgColor='rgba(255, 51, 102, 0.1)' numbers={usersWithSavings.length} />
                     </div>
 
                     <div className={styles.table_container}>
@@ -211,7 +218,7 @@ export default function Dashboard() {
                                     <TableBody>
                                         {filteredData
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map((row : User, index : number) => {
+                                            .map((row : UserProfile, index : number) => {
                                                 const buttonId = `${index}-button`;
                                                 return (
                                                     <TableRow className={styles.table_row} hover role="checkbox" tabIndex={-1} key={index}>
@@ -288,27 +295,33 @@ export default function Dashboard() {
                 onClose={handleActionClose}
                 slotProps={{ paper: { className: styles.dropdown_menu } }}
             >
-                <MenuItem onClick={handleActionClose}>
+                <MenuItem onClick={handleViewDetails}>
                     <FontAwesomeIcon className={styles.menu_icon} icon={faEye} />View Details
                 </MenuItem>
 
-                {currentStatus !== 'Blacklisted' && (
+                {currentStatus !== 'Blacklisted' &&
                     <MenuItem onClick={() => handleStatusChange('Blacklisted')}>
                         <FontAwesomeIcon className={styles.menu_icon} icon={faPersonCircleXmark} />Blacklist User
                     </MenuItem>
-                )}
+                }
 
-                {currentStatus !== 'Active' && (
+                {currentStatus !== 'Pending' &&
+                    <MenuItem onClick={() => handleStatusChange('Pending')}>
+                        <FontAwesomeIcon className={styles.menu_icon} icon={faPersonCircleCheck} />Pending User
+                    </MenuItem>
+                }
+
+                {currentStatus !== 'Active' &&
                     <MenuItem onClick={() => handleStatusChange('Active')}>
                         <FontAwesomeIcon className={styles.menu_icon} icon={faPersonCircleCheck} />Activate User
                     </MenuItem>
-                )}
+                }
 
-                {currentStatus !== 'Inactive' && (
+                {currentStatus !== 'Inactive' &&
                     <MenuItem onClick={() => handleStatusChange('Inactive')}>
                         <FontAwesomeIcon className={styles.menu_icon} icon={faPersonCircleMinus} />Deactivate User
                     </MenuItem>
-                )}
+                }
             </Menu>
 
             <Popover
@@ -339,9 +352,11 @@ export default function Dashboard() {
                             }} 
                         >
                             <MenuItem value="">Select</MenuItem>
-                            <MenuItem value="lendsqr">Lendsqr</MenuItem>
-                            <MenuItem value="irorun">Irorun</MenuItem>
-                            <MenuItem value="lendstar">Lendstar</MenuItem>
+                            {organizations.map((org, index) => (
+                                <MenuItem value={org as string} key={index} >
+                                    {org as string}
+                                </MenuItem>
+                            ))}
                         </TextField>
                     </div>
 

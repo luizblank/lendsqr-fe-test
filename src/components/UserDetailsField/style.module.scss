@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 8px;
+
+    .title {
+        color: rgba(84, 95, 125, 1);
+        font-size: 0.75rem;
+        font-weight: 400;
+    }
+
+    .value {
+        color: rgba(84, 95, 125, 1);
+        font-size: 1rem;
+        font-weight: 500;
+    }
+}

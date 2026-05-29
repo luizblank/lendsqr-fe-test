@@ -11,7 +11,14 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
+import usersData from '../../data/example.json';
+import type { UserProfile } from '../../data/interfaces';
+
 export default function Sidebar() {
+    const savedData = localStorage.getItem('userTableData');
+    const currentData =  savedData ? JSON.parse(savedData) : usersData
+    const organizations = Array.from(new Set(currentData.map((user: UserProfile) => user.organization)));
+
     const id = React.useId();
     const buttonId = `${id}-button`;
     const menuId = `${id}-menu`;
@@ -54,9 +61,9 @@ export default function Sidebar() {
                             },
                         }}
                     >
-                        <MenuItem onClick={handleClose}><FontAwesomeIcon className={styles.menu_icon} icon={faBuildingColumns}/>Sterlink Bank</MenuItem>
-                        <MenuItem onClick={handleClose}><FontAwesomeIcon className={styles.menu_icon} icon={faBuildingColumns}/>Kredi Bank</MenuItem>
-                        <MenuItem onClick={handleClose}><FontAwesomeIcon className={styles.menu_icon} icon={faCoins}/>Paycient Finance</MenuItem>
+                        {organizations.map((org, index) => (
+                            <MenuItem onClick={handleClose}><FontAwesomeIcon className={styles.menu_icon} icon={faBuildingColumns} key={index}/>{org as string}</MenuItem>
+                        ))}
                     </Menu>
                 </div>
 
