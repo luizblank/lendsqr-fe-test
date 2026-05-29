@@ -46,6 +46,9 @@ export default function Sidebar() {
                         open={open}
                         onClose={handleClose}
                         slotProps={{
+                            paper: {
+                                className: styles.dropdown_menu,
+                            },
                             list: {
                                 'aria-labelledby': buttonId,
                             },

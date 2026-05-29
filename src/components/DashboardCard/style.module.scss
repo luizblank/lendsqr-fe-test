@@ -1,0 +1,41 @@
+.container {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 12px;
+
+    padding: 20px 30px;
+    border-radius: 4px;
+    border: 1px solid rgba(84, 95, 125, 0.15);
+
+    box-shadow: rgba(100, 100, 111, 0.1) 0px 5px 30px 0px;
+}
+
+.card_icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1rem;
+
+    border-radius: 100%;
+}
+
+.card_label {
+    color: rgba(84, 95, 125, 1);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.card_numbers {
+    color: rgba(33, 63, 125, 1);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
